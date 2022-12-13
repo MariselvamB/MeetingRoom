@@ -54,17 +54,17 @@
 //                         lastDate: DateTime.now().add(const Duration(days: 365)),
 //                       );
 
-                      // if (date != null) {
-                      //   startDate = date;
-                      //   startDateController.text =
-                      //       DateFormat('dd-MM-yyyy').format(date);
-                      //   endDate = null;
-                      //   endDateController.clear();
-                      //   startTime = null;
-                      //   startTimeController.clear();
-                      //   endTime = null;
-                      //   endTimeController.clear();
-                      // }
+//                       if (date != null) {
+//                         startDate = date;
+//                         startDateController.text =
+//                             DateFormat('dd-MM-yyyy').format(date);
+//                         endDate = null;
+//                         endDateController.clear();
+//                         startTime = null;
+//                         startTimeController.clear();
+//                         endTime = null;
+//                         endTimeController.clear();
+//                       }
 //                     },
 //                     mode: DateMode.date,
 //                   ),

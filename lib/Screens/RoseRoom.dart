@@ -4,6 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
+import 'package:meedingroom/Models/booking_datetime.dart';
+import 'package:meedingroom/NetworkService/network_service.dart';
+
 import 'package:meedingroom/Screens/homeScreenRoomPage.dart';
 
 class RoseRoom extends StatefulWidget {
@@ -33,6 +37,8 @@ class _RoseRoomState extends State<RoseRoom> {
   ];
   DateTime? selectedStartDate;
   DateTime? selectedEndDate;
+  // TimeOfDay? selectedStartTime;
+  // TimeOfDay? selectedEndTime;
   DateTime? selectedStartTime;
   DateTime? selectedEndTime;
   final startDateController = TextEditingController();
@@ -40,106 +46,142 @@ class _RoseRoomState extends State<RoseRoom> {
   final startTimeController = TextEditingController();
   final endTimeController = TextEditingController();
 
-  // TimeOfDay selectedStartTime = TimeOfDay.now();
-  // TimeOfDay selectedEndTime = TimeOfDay.now();
-  String? _selectedStartTime;
-
   String? _selectedEndTime;
 
   bool seleted = true;
 
   Future<void> _selectStartDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    var startDate = await showDatePicker(
+      initialEntryMode: DatePickerEntryMode.calendar,
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
-    if (picked != null && picked != selectedStartDate) {
-      setState(() {
-        selectedStartDate = picked;
-      });
+    if (startDate != null) {
+      selectedStartDate = startDate;
+      startDateController.text = DateFormat('dd-MM-yyyy').format(startDate);
+
+      selectedEndDate = null;
+      endDateController.clear();
+
+      selectedStartTime = null;
+      startTimeController.clear();
+
+      selectedEndTime = null;
+      endTimeController.clear();
     }
   }
 
   Future<void> _selectEndDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedStartDate ?? DateTime.now(),
-      firstDate: selectedStartDate ?? DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-    );
-
-    if (picked != null && picked != selectedEndDate) {
-      setState(() {
-        selectedEndDate = picked;
-      });
-    }
-  }
-
-  Future<void> _selectStartTime() async {
-    if (selectedStartDate != null) {
-      showCupertinoModalPopup(
-        context: context,
-        builder: (context) {
-          return CupertinoDatePicker(
-              use24hFormat: false,
-              mode: CupertinoDatePickerMode.time,
-              minimumDate: selectedStartDate,
-              onDateTimeChanged: (DateTime value) {
-                // set start time
-                setState(() {
-                  selectedEndTime = value;
-                });
-              });
-        },
-      );
-    } else {
+    if (selectedStartDate == null) {
       Get.snackbar('Error', "Select Start Date",
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else {
+      var EndDate = await showDatePicker(
+        initialEntryMode: DatePickerEntryMode.calendar,
+        context: context,
+        initialDate: selectedStartDate!,
+        firstDate: selectedStartDate!,
+        lastDate: selectedStartDate!.add(const Duration(days: 365)),
+      );
+
+      if (EndDate != null) {
+        selectedStartDate = EndDate;
+        endDateController.text = DateFormat('dd-MM-yyyy').format(EndDate);
+      }
     }
   }
+
   // Future<void> _selectStartTime() async {
-  //   DatePickerWidget(
-  //                     hintText: "Start Time",
-  //                     controller: startTimeController,
-  //                     onTap: () async {
-  //                       if (startDate != null) {
-  //                         AppUtils.showTimePicker(
-  //                             controller: startTimeController,
-  //                             context: context,
-  //                             onTimeSelected: (date) {
-  //                               startTime = date;
-  //                             },
-  //                             minimumDate:
-  //                                 startDate!.isToday ? DateTime.now() : null,
-  //                             maximumDate: null);
-  //                       } else {
-  //                         Get.snackbar('Error', "Select Start Date",
-  //                             snackPosition: SnackPosition.BOTTOM,
-  //                             backgroundColor: Colors.red);
-  //                       }
-  //                     },
-  //                     mode: DateMode.time,
-  //                   ),
+  //   if (selectedStartDate != null) {
+  //     showCupertinoModalPopup(
+  //       context: context,
+  //       builder: (context) {
+  //         return CupertinoDatePicker(
+  //             use24hFormat: false,
+  //             mode: CupertinoDatePickerMode.time,
+  //             minimumDate: selectedStartDate,
+  //             maximumDate: null,
+  //             onDateTimeChanged: (DateTime value) {
+  //               setState(() {
+  //                 selectedStartTime = value;
+  //               });
+  //             });
+  //       },
+  //     );
+  //   } else {
+  //     Get.snackbar('Error', "Select Start Date",
+  //         snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+  //   }
   // }
 
-  Future<void> _selectEndTime() async {
-    final TimeOfDay? result = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-        builder: (context, child) {
-          return MediaQuery(
-              data:
-                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-              child: child!);
-        });
-    if (result != null) {
-      setState(() {
-        _selectedEndTime = result.format(context);
-      });
+  Future<void> _selectStartTime() async {
+    if (selectedStartDate == null) {
+      Get.snackbar('Error', "Select Start Date",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else {
+      var startTime = await showTimePicker(
+          initialEntryMode: TimePickerEntryMode.dial,
+          anchorPoint: Offset.infinite,
+          context: context,
+          initialTime: TimeOfDay.now(),
+          builder: (context, child) {
+            return MediaQuery(
+                data: MediaQuery.of(context)
+                    .copyWith(alwaysUse24HourFormat: false),
+                child: child!);
+          });
+      if (startTime != null) {
+        startTimeController.text = DateFormat().locale;
+      }
     }
   }
+
+  Future<void> _selectEndTime() async {
+    if (selectedStartDate == null) {
+      Get.snackbar('Error', "Select Start Date",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+    } else {
+      var EndTime = await showTimePicker(
+          initialEntryMode: TimePickerEntryMode.dial,
+          anchorPoint: Offset.infinite,
+          context: context,
+          initialTime: TimeOfDay.now(),
+          builder: (context, child) {
+            return MediaQuery(
+                data: MediaQuery.of(context)
+                    .copyWith(alwaysUse24HourFormat: false),
+                child: child!);
+          });
+      if (EndTime != null) {
+        endTimeController.text = DateFormat().locale;
+      }
+    }
+  }
+
+  // Future<void> _selectEndTime() async {
+  //   if (selectedStartDate != null) {
+  //     showCupertinoModalPopup(
+  //       context: context,
+  //       builder: (context) {
+  //         return CupertinoDatePicker(
+  //             use24hFormat: false,
+  //             mode: CupertinoDatePickerMode.time,
+  //             minimumDate: selectedStartDate,
+  //             maximumDate: null,
+  //             onDateTimeChanged: (DateTime value) {
+  //               setState(() {
+  //                 selectedEndTime = value;
+  //               });
+  //             });
+  //       },
+  //     );
+  //   } else {
+  //     Get.snackbar('Error', "Select Start Time",
+  //         snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+  //   }
+  // }
 
   // Future<void> _selectStartTime() async {
   //   final TimeOfDay? result = await showTimePicker(
@@ -203,11 +245,13 @@ class _RoseRoomState extends State<RoseRoom> {
                         ),
                       ),
                       child: ListTile(
-                        title: Text(
-                          selectedStartDate != null
-                              ? DateFormat('dd-MM-yyyy')
-                                  .format(selectedStartDate!)
-                              : 'Start Date',
+                        title: TextField(
+                          // selectedStartDate != null
+                          //     ? DateFormat('dd-MM-yyyy')
+                          //         .format(selectedStartDate!)
+                          //     : 'Start Date',
+                          controller: startDateController,
+                          decoration: InputDecoration(hintText: "Start Date"),
                           style: const TextStyle(
                               fontFamily: 'Montserrat',
                               fontStyle: FontStyle.normal,
@@ -238,11 +282,15 @@ class _RoseRoomState extends State<RoseRoom> {
                         ),
                       ),
                       child: ListTile(
-                        title: Text(
-                          selectedEndDate != null
-                              ? DateFormat('dd-MM-yyyy')
-                                  .format(selectedEndDate!)
-                              : 'End Date',
+                        title: TextField(
+                          decoration: InputDecoration(
+                            hintText: "End Date",
+                          ),
+                          // selectedEndDate != null
+                          //     ? DateFormat('dd-MM-yyyy')
+                          //         .format(selectedEndDate!)
+                          //     : 'End Date',
+                          controller: endDateController,
                           style: const TextStyle(
                               decoration: TextDecoration.none,
                               fontFamily: 'Montserrat',
@@ -274,10 +322,15 @@ class _RoseRoomState extends State<RoseRoom> {
                         ),
                       ),
                       child: ListTile(
-                        title: Text(
-                          _selectedStartTime != null
-                              ? _selectedStartTime!
-                              : 'start Time',
+                        title: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Start Time",
+                          ),
+                          // _selectedStartTime != null
+                          //     ? _selectedStartTime!
+                          //     : 'start Time',
+                          controller: startTimeController,
+
                           style: const TextStyle(
                               decoration: TextDecoration.none,
                               fontFamily: 'Montserrat',
@@ -309,10 +362,14 @@ class _RoseRoomState extends State<RoseRoom> {
                         ),
                       ),
                       child: ListTile(
-                        title: Text(
-                          _selectedEndTime != null
-                              ? _selectedEndTime!
-                              : "End Time",
+                        title: TextField(
+                          decoration: InputDecoration(
+                            hintText: "End Time",
+                          ),
+                          // _selectedEndTime != null
+                          //     ? _selectedEndTime!
+                          //     : "End Time",
+                          controller: endTimeController,
                           style: const TextStyle(
                               decoration: TextDecoration.none,
                               fontFamily: 'Montserrat',
@@ -388,8 +445,35 @@ class _RoseRoomState extends State<RoseRoom> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      newShowRoomA_DialogMethod(context);
+                    onTap: () async {
+                      BookingDatetime? BookingDatetimeResponse =
+                          await NetworkService.Bookingpost(
+                        "63831b5cfb01228be2bde679",
+                        "6393101c91379d46d452e4f5",
+                        startDateController.text,
+                        endDateController.text,
+                        startTimeController.text,
+                        endTimeController.text,
+                      );
+                      if (BookingDatetimeResponse != null) {
+                        newShowRoomADialogMethod(context);
+                      } else if (selectedStartDate == null) {
+                        Get.snackbar("Error", "Select Start date",
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red);
+                      } else if (selectedEndDate == null) {
+                        Get.snackbar("Error", "Select End date",
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red);
+                      } else if (selectedStartTime == null) {
+                        Get.snackbar("Error", "Select Start Time",
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red);
+                      } else if (selectedEndTime == null) {
+                        Get.snackbar("Error", "Select End Time",
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red);
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -496,7 +580,7 @@ class _RoseRoomState extends State<RoseRoom> {
     ));
   }
 
-  Future<dynamic> newShowRoomA_DialogMethod(BuildContext context) {
+  Future<dynamic> newShowRoomADialogMethod(BuildContext context) {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -818,7 +902,7 @@ class _RoseRoomState extends State<RoseRoom> {
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
-                          newShowConformationMailSentDialogMethod(context);
+                          // newShowConformationMailSentDialogMethod(context);
                         },
                         child: Container(
                           decoration: BoxDecoration(

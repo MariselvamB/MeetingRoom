@@ -231,7 +231,7 @@ class _LockersScreenState extends State<LockersScreen> {
             color: AppColors.appBackground,
           ),
           child: GridView.builder(
-              padding: EdgeInsets.only(top: 25, left: 25, right: 25),
+              padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
               scrollDirection: Axis.vertical,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6, mainAxisSpacing: 35, crossAxisSpacing: 35),
@@ -248,7 +248,7 @@ class _LockersScreenState extends State<LockersScreen> {
                       color: AppColors.appBackground,
                       border: Border.all(
                         width: 1,
-                        color: Color.fromRGBO(57, 136, 181, 0.3),
+                        color: const Color.fromRGBO(57, 136, 181, 0.3),
                       ),
                     ),
                     child: Padding(
@@ -259,11 +259,12 @@ class _LockersScreenState extends State<LockersScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                                 width: 1,
                               ),
-                              Icon(Icons.edit, size: 10, color: AppColors.text),
+                              const Icon(Icons.edit,
+                                  size: 10, color: AppColors.text),
                             ],
                           ),
                           Icon(
@@ -340,23 +341,23 @@ class _LockersScreenState extends State<LockersScreen> {
                     Row(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(
+                          margin: const EdgeInsets.only(
                               top: 10, bottom: 30, left: 30, right: 20),
-                          child: Icon(Icons.lock_outline,
+                          child: const Icon(Icons.lock_outline,
                               size: 70,
                               color: Color.fromRGBO(255, 113, 207, 1)),
                         ),
                         Container(
-                          margin:
-                              EdgeInsets.only(top: 10, bottom: 30, right: 20),
-                          padding: EdgeInsets.only(top: 10, right: 20),
+                          margin: const EdgeInsets.only(
+                              top: 10, bottom: 30, right: 20),
+                          padding: const EdgeInsets.only(top: 10, right: 20),
                           child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 10),
                                 child: Text(
                                   "Locker 3",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     decoration: TextDecoration.none,
                                     fontFamily: 'Montserrat',
                                     fontStyle: FontStyle.normal,
@@ -366,11 +367,11 @@ class _LockersScreenState extends State<LockersScreen> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 10),
                                 child: Text(
                                   "Booked",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       decoration: TextDecoration.none,
                                       fontFamily: 'Montserrat',
                                       fontStyle: FontStyle.normal,
@@ -401,9 +402,9 @@ class _LockersScreenState extends State<LockersScreen> {
                             color: const Color.fromARGB(255, 52, 146, 255),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(
+                            padding: EdgeInsets.only(
                                 left: 20, right: 20, top: 8, bottom: 8),
                             child: Text(
                               "Close",
@@ -435,9 +436,9 @@ class _LockersScreenState extends State<LockersScreen> {
                             color: const Color.fromRGBO(52, 146, 255, 1),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(
+                            padding: EdgeInsets.only(
                                 left: 20, right: 20, top: 8, bottom: 8),
                             child: Text(
                               "Open",
@@ -499,23 +500,23 @@ class _LockersScreenState extends State<LockersScreen> {
                     Row(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(
+                          margin: const EdgeInsets.only(
                               top: 10, bottom: 30, left: 30, right: 20),
-                          child: Icon(Icons.lock_outline,
+                          child: const Icon(Icons.lock_outline,
                               size: 70,
                               color: Color.fromRGBO(255, 113, 207, 1)),
                         ),
                         Container(
-                          margin:
-                              EdgeInsets.only(top: 10, bottom: 30, right: 20),
-                          padding: EdgeInsets.only(top: 10, right: 20),
+                          margin: const EdgeInsets.only(
+                              top: 10, bottom: 30, right: 20),
+                          padding: const EdgeInsets.only(top: 10, right: 20),
                           child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 10),
                                 child: Text(
                                   "Locker 3",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     decoration: TextDecoration.none,
                                     fontFamily: 'Montserrat',
                                     fontStyle: FontStyle.normal,
@@ -525,11 +526,11 @@ class _LockersScreenState extends State<LockersScreen> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 10),
                                 child: Text(
                                   "Booked",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       decoration: TextDecoration.none,
                                       fontFamily: 'Montserrat',
                                       fontStyle: FontStyle.normal,
@@ -560,9 +561,9 @@ class _LockersScreenState extends State<LockersScreen> {
                         color: const Color.fromRGBO(52, 146, 255, 1),
                       ),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Padding(
-                        padding: const EdgeInsets.only(
+                        padding: EdgeInsets.only(
                             left: 20, right: 20, top: 8, bottom: 8),
                         child: Text(
                           "Create Pass Code",
@@ -616,12 +617,12 @@ class _LockersScreenState extends State<LockersScreen> {
                     )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 40, right: 40, top: 20, bottom: 40),
+                const Padding(
+                  padding:
+                      EdgeInsets.only(left: 40, right: 40, top: 20, bottom: 40),
                   child: Text(
                     "You Already have a Locker",
-                    style: const TextStyle(
+                    style: TextStyle(
                         decoration: TextDecoration.none,
                         fontFamily: 'Montserrat',
                         fontStyle: FontStyle.normal,
@@ -645,9 +646,9 @@ class _LockersScreenState extends State<LockersScreen> {
                             color: const Color.fromARGB(255, 52, 146, 255),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(
+                            padding: EdgeInsets.only(
                                 left: 20, right: 20, top: 8, bottom: 8),
                             child: Text(
                               "Close",
@@ -679,9 +680,9 @@ class _LockersScreenState extends State<LockersScreen> {
                             color: const Color.fromRGBO(52, 146, 255, 1),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(
+                            padding: EdgeInsets.only(
                                 left: 20, right: 20, top: 8, bottom: 8),
                             child: Text(
                               "Add Locker",
@@ -734,7 +735,7 @@ class _LockersScreenState extends State<LockersScreen> {
                   child: Column(
                     children: [
                       Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               top: 10, bottom: 10, left: 10, right: 10),
                           child: Container(
                               child: Image.asset("Assets/MailImage.png"))),
