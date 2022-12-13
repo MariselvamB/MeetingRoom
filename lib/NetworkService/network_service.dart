@@ -6,15 +6,19 @@ import 'package:http/http.dart' as http;
 import 'package:meedingroom/Models/sign_in/sign_in.api.json.dart';
 
 class NetworkService {
-  static Future<SignIn> signInpost(String UserName, String Password) async {
+  static Future<SignIn?> signInpost(String UserName, String Password) async {
     var Url = Uri.parse("http://52.76.62.147:9000/api/panel/facility/login");
-    final response = await http.post(Url, body: {
-      "username": UserName,
-      "password": Password,
-    });
+    final response = await http.post(Url,
+        body: jsonEncode({
+          "username": UserName,
+          "password": Password,
+        }),
+        headers: {"Content-Type": "application/json"});
     if (response.statusCode == 200) {
       SignIn signInresponse = SignIn.fromJson(jsonDecode(response.body));
       return signInresponse;
+    } else if (response.statusCode == 404) {
+      print("password incorrect");
     } else {
       throw Exception("Failed to Load Form Data");
     }

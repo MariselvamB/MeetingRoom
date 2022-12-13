@@ -2,6 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
+import 'package:meedingroom/Models/sign_in/sign_in.api.json.dart';
+import 'package:meedingroom/NetworkService/network_service.dart';
+import 'package:meedingroom/Screens/LockersScreen.dart';
 import 'package:meedingroom/Screens/homeScreenLockerPage.dart';
 import 'package:meedingroom/Screens/homeScreenRoomPage.dart';
 import 'package:meedingroom/Screens/Level_13_Page.dart';
@@ -268,27 +274,27 @@ class _SignInDualPage_PageState extends State<SignInDualPage_Page> {
                                         onTap: () async {
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
+                                            SignIn? loginResponse =
+                                                await NetworkService.signInpost(
+                                                    _UserNamecontroller.text,
+                                                    _passwordcontroller.text);
+                                            if (loginResponse != null) {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const Level_13_Page()));
-                                            //
-                                            // SignIn loginResponse =
-                                            //     await NetworkService
-                                            //         .signInpost(
-                                            //             _UserNamecontroller
-                                            //                 .text,
-                                            //             _passwordcontroller
-                                            //                 .text);
-                                            // if (loginResponse.data.message)
-                                            // Navigator.push(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //       builder: (context) =>
-                                            //           const roseRoomPage(),
-                                            //     ));
-                                            // }
+                                                        const RoseRoom(),
+                                                  ));
+                                            } else {
+                                              Get.showSnackbar(
+                                                const GetSnackBar(
+                                                  title: "Error",
+                                                  message: 'Password Incorrect',
+                                                  duration:
+                                                      Duration(seconds: 2),
+                                                ),
+                                              );
+                                            }
                                           }
                                         },
                                         child: Padding(
@@ -423,23 +429,32 @@ class _SignInDualPage_PageState extends State<SignInDualPage_Page> {
                                     ),
                                   ),
                                   Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.only(
-                                          top: 20,
-                                          bottom: 10,
-                                          left: 30,
-                                          right: 45),
-                                      alignment: Alignment.center,
-                                      child: const Text("Forgot Password?",
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              fontFamily: 'Lato',
-                                              fontStyle: FontStyle.normal,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 12,
-                                              letterSpacing: 0.5,
-                                              color: Color.fromRGBO(
-                                                  0, 26, 255, 1))),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LockersScreen()));
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.only(
+                                            top: 20,
+                                            bottom: 10,
+                                            left: 30,
+                                            right: 45),
+                                        alignment: Alignment.center,
+                                        child: const Text("Forgot Password?",
+                                            style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                fontFamily: 'Lato',
+                                                fontStyle: FontStyle.normal,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 12,
+                                                letterSpacing: 0.5,
+                                                color: Color.fromRGBO(
+                                                    0, 26, 255, 1))),
+                                      ),
                                     ),
                                   ),
                                   Row(
