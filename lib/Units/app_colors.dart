@@ -8,7 +8,8 @@ class AppColors {
   static const Color grey = Colors.grey;
   static const Color blue = Colors.blue;
   static const Color red = Colors.red;
-  static const Color appBackground = Color.fromARGB(255, 78, 78, 78);
+
   static const Color text = Color.fromARGB(255, 242, 243, 242);
   static const Color blurColor = Color.fromARGB(255, 52, 146, 255);
+  static const Color appBackground = Color.fromRGBO(41, 41, 41, 1);
 }
